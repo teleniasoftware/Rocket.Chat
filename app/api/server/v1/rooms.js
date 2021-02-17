@@ -2,9 +2,19 @@ import { Meteor } from 'meteor/meteor';
 import Busboy from 'busboy';
 
 import { FileUpload } from '../../../file-upload';
-import { Rooms, Messages } from '../../../models';
+import { Rooms, Messages, Subscriptions } from '../../../models';
 import { API } from '../api';
 import { findAdminRooms, findChannelAndPrivateAutocomplete } from '../lib/rooms';
+
+
+
+function findSubscriptionByRoomIdAndUserId(roomId, userId){
+	if(!roomId || !userId ){
+	  throw new Meteor.Error('error-params-not-provided', 'Params "roomId" and "userId" are required');
+	}
+	const subscription = Subscriptions.findOneByRoomIdAndUserId(roomId, userId);
+	return subscription;
+}
 
 function findRoomByIdOrName({ params, checkedArchived = true }) {
 	if ((!params.roomId || !params.roomId.trim()) && (!params.roomName || !params.roomName.trim())) {
@@ -223,6 +233,40 @@ API.v1.addRoute('rooms.leave', { authRequired: true }, {
 
 		return API.v1.success();
 	},
+});
+
+
+// Custom method by Alessandro Valentino
+// This method will be used from the agent to hide the livechat room ( or any other room actually )
+API.v1.addRoute('room.hide', {
+	authRequired: true
+  }, {
+	post() {
+	  try {
+		check(this.bodyParams, {
+		  rid: String
+		});
+		const {
+		  rid
+		} = this.bodyParams;
+		check(rid, String);
+		console.log("##Telenia_Rocket## room.hide. UserId: ", this.userId);
+		const subscription = findSubscriptionByRoomIdAndUserId(rid, this.userId);
+
+		console.log("##Telenia_Rocket## room.hide. Subscription: ", subscription);
+
+		if (!subscription.open) {
+		  return API.v1.failure("The room, ".concat(this.bodyParams.name, ", is already hidden"));
+		}
+
+		Meteor.runAsUser(this.userId, () => {
+		  Meteor.call('hideRoom', rid);
+		});
+		return API.v1.success();
+	  } catch (e) {
+		return API.v1.failure(e);
+	  }
+	}
 });
 
 API.v1.addRoute('rooms.createDiscussion', { authRequired: true }, {

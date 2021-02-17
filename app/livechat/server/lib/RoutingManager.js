@@ -34,21 +34,22 @@ export const RoutingManager = {
 		return this.getMethod().config || {};
 	},
 
-	async getNextAgent(department) {
+	async getNextAgent(department, custom_values) {
 		let agent = callbacks.run('livechat.beforeGetNextAgent', department);
 
 		if (!agent) {
-			agent = await this.getMethod().getNextAgent(department);
+			agent = await this.getMethod().getNextAgent(department, custom_values);
 		}
 
 		return agent;
 	},
 
-	async delegateInquiry(inquiry, agent) {
+	async delegateInquiry(inquiry, agent, custom_values) {
+		console.log("##Telenia_Rocket## delegate Inquiry con custom_values:", custom_values);
 		// return Room Object
 		const { department, rid } = inquiry;
 		if (!agent || (agent.username && !Users.findOneOnlineAgentByUsername(agent.username))) {
-			agent = await this.getNextAgent(department);
+			agent = await this.getNextAgent(department, custom_values);
 		}
 
 		if (!agent) {

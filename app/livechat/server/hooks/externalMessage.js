@@ -21,6 +21,7 @@ settings.get('Livechat_Knowledge_Apiai_Language', function(key, value) {
 });
 
 callbacks.add('afterSaveMessage', function(message, room) {
+	console.log("##Telenia_Rocket## afterSaveMessage with message: ", message);
 	// skips this callback if the message was edited
 	if (!message || message.editedAt) {
 		return message;

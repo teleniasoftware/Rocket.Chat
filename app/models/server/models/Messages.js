@@ -967,7 +967,23 @@ export class Messages extends Base {
 		});
 	}
 
+	// Custom modification by Alessandro Valentino
+	setLivechatMessagesAsRead(rid, userId) {
+		return this.update({
+		  rid,
+		  unread: true,
+		  "u._id": userId
+		}, {
+		  $unset: {
+			unread: 1
+		  }
+		}, {
+		  multi: true
+		});
+	}
+
 	setAsReadById(_id) {
+		console.log("Set unread id:" + _id);
 		return this.update({
 			_id,
 		}, {
@@ -991,6 +1007,22 @@ export class Messages extends Base {
 			fields: {
 				_id: 1,
 			},
+		});
+	}
+
+	// Custom modification by Alessandro Valentino
+	findUnreadMessagesByRoomAndUserId(rid, userId) {
+		const query = {
+		  rid,
+		  u: {
+			_id: userId
+		  }
+		};
+
+		return this.find(query, {
+		  fields: {
+			_id: 1
+		  }
 		});
 	}
 

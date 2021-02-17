@@ -23,6 +23,7 @@ const updateMessages = debounceByRoomId(Meteor.bindEnvironment(({ _id, lm }) => 
 		return;
 	}
 
+	console.log("##Telenia_Rocket## updateMessages");
 	Messages.setAsRead(_id, firstSubscription.ls);
 
 	if (lm <= firstSubscription.ls) {
@@ -30,11 +31,35 @@ const updateMessages = debounceByRoomId(Meteor.bindEnvironment(({ _id, lm }) => 
 	}
 }));
 
+// Custom modification by Alessandro Valentino
+const updateLivechatMessages = debounceByRoomId(Meteor.bindEnvironment((_ref) => {
+	let {
+	  rid,
+	  userId
+	} = _ref;
+	// @TODO maybe store firstSubscription in room object so we don't need to call the above update method
+	// const firstSubscription = Subscriptions.getMinimumLastSeenByRoomId(_id);
+
+	// if (!firstSubscription) {
+	//   return;
+	// }
+
+	console.log("Customization: updateLivechatMessages. Room id -> " + rid + " | User id: " + userId);
+	const modifiedMessages = Messages.setLivechatMessagesAsRead(rid, userId);
+	console.log("Customization: updateLivechatMessages. Modified messages -> " + modifiedMessages);
+
+	// if (lm <= firstSubscription.ls) {
+	//   Rooms.setLastMessageAsRead(_id);
+	// }
+}));
+
 export const ReadReceipt = {
 	markMessagesAsRead(roomId, userId, userLastSeen) {
 		if (!settings.get('Message_Read_Receipt_Enabled')) {
 			return;
 		}
+
+		console.log("##Telenia_Rocket## markMessagesAsRead");
 
 		const room = Rooms.findOneById(roomId, { fields: { lm: 1 } });
 
@@ -50,18 +75,49 @@ export const ReadReceipt = {
 		updateMessages(room);
 	},
 
+	// Custom method by Alessandro Valentino
+	markLivechatMessagesAsRead(roomId, userId) {
+
+		if (!settings.get('Message_Read_Receipt_Enabled')) {
+		  return;
+		}
+
+		console.log("Customization: markLivechatMessagesAsRead");
+
+		const room = Rooms.findOneById(roomId, {
+		  fields: {
+			lm: 1
+		  }
+		});
+
+		this.storeReadReceipts(Messages.findUnreadMessagesByRoomAndUserId(roomId, userId), roomId, userId);
+
+
+		updateLivechatMessages({
+		  rid: roomId,
+		  userId
+		});
+	},
+
 	markMessageAsReadBySender(message, roomId, userId) {
 		if (!settings.get('Message_Read_Receipt_Enabled')) {
 			return;
 		}
 
 		// this will usually happens if the message sender is the only one on the room
-		const firstSubscription = Subscriptions.getMinimumLastSeenByRoomId(roomId);
-		if (firstSubscription && message.unread && message.ts < firstSubscription.ls) {
+		console.log("##Telenia_Rocket## markMessageAsReadBySender ", roomId);
+    	const firstSubscription = Subscriptions.getMinimumLastSeenByRoomId(roomId);
+		// if (firstSubscription && message.unread && message.ts < firstSubscription.ls) {
+		// 	Messages.setAsReadById(message._id, firstSubscription.ls);
+		// }
+
+		const room = Rooms.findOneById(roomId, { fields: { t: 1 } });
+
+		if (firstSubscription && message.unread && message.ts < firstSubscription.ls && room.t !== "l") {
+			console.log("##Telenia_Rocket## 'firstSubscription && message.unread && message.ts < firstSubscription.ls && room.t !== 'l''", firstSubscription, message);
 			Messages.setAsReadById(message._id, firstSubscription.ls);
 		}
 
-		const room = Rooms.findOneById(roomId, { fields: { t: 1 } });
 		const extraData = roomTypes.getConfig(room.t).getReadReceiptsExtraData(message);
 
 		this.storeReadReceipts([{ _id: message._id }], roomId, userId, extraData);

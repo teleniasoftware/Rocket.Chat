@@ -10,7 +10,7 @@ Meteor.methods({
 		const visitor = LivechatVisitors.getVisitorByToken(token);
 
 		const language = (visitor && visitor.language) || settings.get('Language') || 'en';
-
+		console.log("##Telenia_Rocket## livechat:closeByVisitor visitor = ", visitor );
 		return Livechat.closeRoom({
 			visitor,
 			room: LivechatRooms.findOneOpenByRoomIdAndVisitorToken(roomId, token),

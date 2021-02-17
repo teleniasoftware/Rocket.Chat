@@ -8,7 +8,7 @@ import { RoutingManager } from './RoutingManager';
 import { Livechat } from './Livechat';
 
 export const QueueManager = {
-	async requestRoom({ guest, message, roomInfo, agent }) {
+	async requestRoom({ guest, message, roomInfo, agent, custom_values }) {
 		if (!Livechat.online()) {
 			throw new Meteor.Error('no-agent-online', 'Sorry, no online agents');
 		}
@@ -27,6 +27,7 @@ export const QueueManager = {
 		const name = (roomInfo && roomInfo.fname) || guest.name || guest.username;
 
 		const room = LivechatRooms.findOneById(createLivechatRoom(rid, name, guest, roomInfo));
+		console.log("##Telenia_Rocket## queuemanager custom_value: ", custom_values);
 		let inquiry = LivechatInquiry.findOneById(createLivechatInquiry(rid, name, guest, message));
 
 		LivechatRooms.updateRoomCount();
@@ -40,6 +41,6 @@ export const QueueManager = {
 			return room;
 		}
 
-		return RoutingManager.delegateInquiry(inquiry, agent);
+		return RoutingManager.delegateInquiry(inquiry, agent, custom_values);
 	},
 };

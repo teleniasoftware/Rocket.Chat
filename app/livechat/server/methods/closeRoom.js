@@ -7,6 +7,9 @@ import { Livechat } from '../lib/Livechat';
 Meteor.methods({
 	'livechat:closeRoom'(roomId, comment) {
 		const userId = Meteor.userId();
+
+		console.log( "##Telenia_Rocket## livechat:closeRoom - userId = ", userId );
+
 		if (!userId || !hasPermission(userId, 'close-livechat-room')) {
 			throw new Meteor.Error('error-not-authorized', 'Not authorized', { method: 'livechat:closeRoom' });
 		}

@@ -3,7 +3,7 @@ import { check } from 'meteor/check';
 
 import { deleteRoom } from '../../app/lib';
 import { hasPermission } from '../../app/authorization';
-import { Rooms } from '../../app/models';
+import { Rooms, LivechatRooms, Messages, Subscriptions } from '../../app/models';
 import { Apps } from '../../app/apps/server';
 import { roomTypes } from '../../app/utils';
 
@@ -25,25 +25,32 @@ Meteor.methods({
 			});
 		}
 
-		if (!roomTypes.roomTypes[room.t].canBeDeleted(hasPermission, room)) {
-			throw new Meteor.Error('error-not-allowed', 'Not allowed', {
-				method: 'eraseRoom',
-			});
-		}
-
-		if (Apps && Apps.isLoaded()) {
-			const prevent = Promise.await(Apps.getBridges().getListenerBridge().roomEvent('IPreRoomDeletePrevent', room));
-			if (prevent) {
-				throw new Meteor.Error('error-app-prevented-deleting', 'A Rocket.Chat App prevented the room erasing.');
+		console.log("##Telenia_Rocket##: eraseRoom room type ", room.t);
+		if ( room.t == 'l' ) {
+			Messages.removeByRoomId(rid);
+			Subscriptions.removeByRoomId(rid);
+			return LivechatRooms.removeById(rid);
+		} else {
+			if (!roomTypes.roomTypes[room.t].canBeDeleted(hasPermission, room)) {
+				throw new Meteor.Error('error-not-allowed', 'Not allowed', {
+					method: 'eraseRoom',
+				});
 			}
+
+			if (Apps && Apps.isLoaded()) {
+				const prevent = Promise.await(Apps.getBridges().getListenerBridge().roomEvent('IPreRoomDeletePrevent', room));
+				if (prevent) {
+					throw new Meteor.Error('error-app-prevented-deleting', 'A Rocket.Chat App prevented the room erasing.');
+				}
+			}
+
+			const result = deleteRoom(rid);
+
+			if (Apps && Apps.isLoaded()) {
+				Apps.getBridges().getListenerBridge().roomEvent('IPostRoomDeleted', room);
+			}
+
+			return result;
 		}
-
-		const result = deleteRoom(rid);
-
-		if (Apps && Apps.isLoaded()) {
-			Apps.getBridges().getListenerBridge().roomEvent('IPostRoomDeleted', room);
-		}
-
-		return result;
 	},
 });

@@ -463,6 +463,14 @@ export class Subscriptions extends Base {
 		return this.findOne(query, options);
 	}
 
+	findOneByRoomIdAndVisitorUserId(roomId, visitorUserId, options) {
+		const query = {
+		  rid: roomId,
+		  'v._id': visitorUserId
+		};
+		return this.findOne(query, options);
+	}
+
 	findOneByRoomIdAndUsername(roomId, username, options) {
 		const query = {
 			rid: roomId,

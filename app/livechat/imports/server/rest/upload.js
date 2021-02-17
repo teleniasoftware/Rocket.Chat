@@ -100,6 +100,7 @@ API.v1.addRoute('livechat/upload/:rid', {
 		uploadedFile.description = fields.description;
 
 		delete fields.description;
-		API.v1.success(Meteor.call('sendFileLivechatMessage', this.urlParams.rid, visitorToken, uploadedFile, fields));
+		const tmpResult = API.v1.success(Meteor.call('sendFileLivechatMessage', this.urlParams.rid, visitorToken, uploadedFile, fields));
+    	return tmpResult;
 	},
 });

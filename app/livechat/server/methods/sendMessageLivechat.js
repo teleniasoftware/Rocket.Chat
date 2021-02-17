@@ -5,7 +5,7 @@ import { LivechatVisitors } from '../../../models';
 import { Livechat } from '../lib/Livechat';
 
 Meteor.methods({
-	sendMessageLivechat({ token, _id, rid, msg, file, attachments }, agent) {
+	sendMessageLivechat({ token, _id, rid, msg, file, attachments, custom_values }, agent) {
 		check(token, String);
 		check(_id, String);
 		check(rid, String);
@@ -28,7 +28,7 @@ Meteor.methods({
 		if (!guest) {
 			throw new Meteor.Error('invalid-token');
 		}
-
+		console.log("##Telenia_Rocket## sendMessageLivechat with custom_values: ", custom_values);
 		return Livechat.sendMessage({
 			guest,
 			message: {
@@ -40,6 +40,7 @@ Meteor.methods({
 				attachments,
 			},
 			agent,
+			custom_values
 		});
 	},
 });

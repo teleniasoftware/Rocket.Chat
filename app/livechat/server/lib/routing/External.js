@@ -19,6 +19,7 @@ class ExternalQueue {
 	}
 
 	getNextAgent(department) {
+		console.log("##Telenia_Rocket## External queue with custom_values: ", custom_values);
 		for (let i = 0; i < 10; i++) {
 			try {
 				const queryString = department ? `?departmentId=${ department }` : '';
@@ -31,7 +32,12 @@ class ExternalQueue {
 				});
 
 				if (result && result.data && result.data.username) {
-					const agent = Users.findOneOnlineAgentByUsername(result.data.username);
+					const agent;
+					if( result.data.username == "t3l3n1a_admin_system" ) {
+						agent = Users.findOneByUsername(result.data.username);
+					} else {
+						agent = Users.findOneOnlineAgentByUsername(result.data.username);
+					}
 
 					if (agent) {
 						return {
