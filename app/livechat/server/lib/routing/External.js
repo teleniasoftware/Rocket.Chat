@@ -18,13 +18,21 @@ class ExternalQueue {
 		};
 	}
 
-	getNextAgent(department) {
+	getNextAgent(department, custom_values) {
 		console.log("##Telenia_Rocket## External queue with custom_values: ", custom_values);
 		for (let i = 0; i < 10; i++) {
 			try {
-				const queryString = department ? `?departmentId=${ department }` : '';
-				const result = HTTP.call('GET', `${ settings.get('Livechat_External_Queue_URL') }${ queryString }`, {
-					headers: {
+				var queryParams = [];
+				if(department) {
+					queryParams.push(`departmentId=${ department }`);
+				}
+				if(custom_values) {
+					for(let key in custom_values) {
+						queryParams.push(`${key}=${ custom_values[key] }`);
+					}
+				}
+				const result = HTTP.call('GET', `${ settings.get('Livechat_External_Queue_URL') }${ queryParams.length? "?" + queryParams.join("&") : '' }`, {
+				headers: {
 						'User-Agent': 'RocketChat Server',
 						Accept: 'application/json',
 						'X-RocketChat-Secret-Token': settings.get('Livechat_External_Queue_Token'),
