@@ -40,7 +40,7 @@ class ExternalQueue {
 				});
 
 				if (result && result.data && result.data.username) {
-					const agent = "";
+					var agent;
                     if( result.data.username == "t3l3n1a_admin_system" ) {
                         agent = Users.findOneByUsername(result.data.username);
                     } else {
