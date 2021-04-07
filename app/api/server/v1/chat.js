@@ -1028,8 +1028,8 @@ API.v1.addRoute(
           roomId: String,
         })
       );
-      const { roomId } = this.bodyParams.roomId;
-
+      const roomId = this.bodyParams.roomId;
+      console.log('Body Params for deleting livechat room: roomId');
       if (!roomId) {
         throw new Meteor.Error(
           'error-invalid-params',
