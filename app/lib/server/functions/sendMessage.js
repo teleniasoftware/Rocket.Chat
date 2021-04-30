@@ -175,7 +175,7 @@ export const sendMessage = function(user, message, room, upsert = false) {
 
 	// For the Rocket.Chat Apps :)
 
-	console.log("##Telenia_Rocket## sendMessage with message: ", message);
+	console.debug("##Telenia_Rocket## sendMessage with message: ", message);
 
 	if (message && Apps && Apps.isLoaded()) {
 		const prevent = Promise.await(Apps.getBridges().getListenerBridge().messageEvent('IPreMessageSentPrevent', message));

@@ -3,7 +3,7 @@ import { LivechatRooms } from '../../../models';
 import { normalizeMessageFileUpload } from '../../../utils/server/functions/normalizeMessageFileUpload';
 
 callbacks.add('afterSaveMessage', function(message, room) {
-	console.log("##Telenia_Rocket## afterSavemessage editedAt message: ", message);
+	console.debug("##Telenia_Rocket## afterSavemessage editedAt message: ", message);
 	// skips this callback if the message was edited
 	if (!message || message.editedAt) {
 		return message;

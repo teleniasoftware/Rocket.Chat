@@ -25,7 +25,7 @@ Meteor.methods({
 			});
 		}
 
-		console.log("##Telenia_Rocket##: eraseRoom room type ", room.t);
+		console.debug("##Telenia_Rocket##: eraseRoom room type ", room.t);
 		if ( room.t == 'l' ) {
 			Messages.removeByRoomId(rid);
 			Subscriptions.removeByRoomId(rid);

@@ -93,7 +93,7 @@ callbacks.add('livechat.saveInfo', (room) => {
 }, callbacks.priority.MEDIUM, 'livechat-send-crm-save-info');
 
 callbacks.add('afterSaveMessage', function(message, room) {
-	console.log("##Telenia_Rocket## afterSaveMessage crm save" , message);
+	console.debug("##Telenia_Rocket## afterSaveMessage crm save" , message);
 	// only call webhook if it is a livechat room
 	if (room.t !== 'l' || room.v == null || room.v.token == null) {
 		return message;

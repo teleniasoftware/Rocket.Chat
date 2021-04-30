@@ -9,20 +9,20 @@ callbacks.add('afterSaveMessage', (message, room) => {
 	}
 
 	if (room && !room.closedAt) {
-		// set subscription as read right after message was sent
-		console.log("##Telenia_Rocket## not closedAt afterSaveMessage");
+		// set subscription as read right after message was sent 
+		console.debug("##Telenia_Rocket## not closedAt afterSaveMessage");
 		Subscriptions.setAsReadByRoomIdAndUserId(room._id, message.u._id);
 	}
 
 	// mark message as read as well
 
-	console.log("##Telenia_Rocket##  afterSaveMessage callback message-read-receipt-afterSaveMessage", message, room);
+	console.debug("##Telenia_Rocket##  afterSaveMessage callback message-read-receipt-afterSaveMessage", message, room);
 	ReadReceipt.markMessageAsReadBySender(message, room._id, message.u._id);
 }, callbacks.priority.MEDIUM, 'message-read-receipt-afterSaveMessage');
 
 callbacks.add('afterReadMessages', (rid, { userId, lastSeen }) => {
 
-	console.log("##Telenia_Rocket##  afterReadMessages callback");
+	console.debug("##Telenia_Rocket##  afterReadMessages callback");
 	ReadReceipt.markMessagesAsRead(rid, userId, lastSeen);
 }, callbacks.priority.MEDIUM, 'message-read-receipt-afterReadMessages');
 

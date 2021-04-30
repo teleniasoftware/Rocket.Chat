@@ -27,7 +27,7 @@ function validateMessage(message, room) {
 }
 
 callbacks.add('afterSaveMessage', function(message, room) {
-	console.log("##Telenia_Rocket## afterSavemessage bis: ", message);
+	console.debug("##Telenia_Rocket## afterSavemessage bis: ", message);
 	if (!validateMessage(message, room)) {
 		return message;
 	}

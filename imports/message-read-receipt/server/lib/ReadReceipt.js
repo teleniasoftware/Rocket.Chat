@@ -23,7 +23,7 @@ const updateMessages = debounceByRoomId(Meteor.bindEnvironment(({ _id, lm }) => 
 		return;
 	}
 
-	console.log("##Telenia_Rocket## updateMessages");
+	console.debug("##Telenia_Rocket## updateMessages");
 	Messages.setAsRead(_id, firstSubscription.ls);
 
 	if (lm <= firstSubscription.ls) {
@@ -59,7 +59,7 @@ export const ReadReceipt = {
 			return;
 		}
 
-		console.log("##Telenia_Rocket## markMessagesAsRead");
+		console.debug("##Telenia_Rocket## markMessagesAsRead");
 
 		const room = Rooms.findOneById(roomId, { fields: { lm: 1 } });
 
@@ -105,7 +105,7 @@ export const ReadReceipt = {
 		}
 
 		// this will usually happens if the message sender is the only one on the room
-		console.log("##Telenia_Rocket## markMessageAsReadBySender ", roomId);
+		console.debug("##Telenia_Rocket## markMessageAsReadBySender ", roomId);
     	const firstSubscription = Subscriptions.getMinimumLastSeenByRoomId(roomId);
 		// if (firstSubscription && message.unread && message.ts < firstSubscription.ls) {
 		// 	Messages.setAsReadById(message._id, firstSubscription.ls);
@@ -114,7 +114,7 @@ export const ReadReceipt = {
 		const room = Rooms.findOneById(roomId, { fields: { t: 1 } });
 
 		if (firstSubscription && message.unread && message.ts < firstSubscription.ls && room.t !== "l") {
-			console.log("##Telenia_Rocket## 'firstSubscription && message.unread && message.ts < firstSubscription.ls && room.t !== 'l''", firstSubscription, message);
+			console.debug("##Telenia_Rocket## 'firstSubscription && message.unread && message.ts < firstSubscription.ls && room.t !== 'l''", firstSubscription, message);
 			Messages.setAsReadById(message._id, firstSubscription.ls);
 		}
 

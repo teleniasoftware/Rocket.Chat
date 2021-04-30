@@ -115,7 +115,7 @@ export const Livechat = {
 			message.rid = Random.id();
 			room = null;
 		}
-		console.log("##Telenia_Rocket## getRooom con custom_values: ", custom_values);
+		console.debug("##Telenia_Rocket## getRooom con custom_values: ", custom_values);
 		if (room == null) {
 			// if no department selected verify if there is at least one active and pick the first
 			if (!agent && !guest.department) {
@@ -144,7 +144,7 @@ export const Livechat = {
 
 	async sendMessage({ guest, message, roomInfo, agent, custom_values }) {
 		const { room, newRoom } = await this.getRoom(guest, message, roomInfo, agent, custom_values);
-		console.log("##Telenia_Rocket## sendMessage with message:", message);
+		console.debug("##Telenia_Rocket## sendMessage with message:", message);
 		if (guest.name) {
 			message.alias = guest.name;
 		}
@@ -299,9 +299,9 @@ export const Livechat = {
 	},
 
 	closeRoom({ user, visitor, room, comment }) {
-		console.log( "##Telenia_Rocket## closeRoom room = ", room );
+		console.debug( "##Telenia_Rocket## closeRoom room = ", room );
 		if (!room || room.t !== 'l' || !room.open) {
-			console.log( "##Telenia_Rocket## closeRoom: '!room || room.t !== 'l' || !room.open'" );
+			console.debug( "##Telenia_Rocket## closeRoom: '!room || room.t !== 'l' || !room.open'" );
 			return false;
 		}
 

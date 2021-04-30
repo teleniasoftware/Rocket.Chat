@@ -28,7 +28,7 @@ Meteor.methods({
 		if (!guest) {
 			throw new Meteor.Error('invalid-token');
 		}
-		console.log("##Telenia_Rocket## sendMessageLivechat with custom_values: ", custom_values);
+		console.debug("##Telenia_Rocket## sendMessageLivechat with custom_values: ", custom_values);
 		return Livechat.sendMessage({
 			guest,
 			message: {

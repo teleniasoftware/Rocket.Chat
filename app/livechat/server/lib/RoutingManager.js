@@ -45,7 +45,7 @@ export const RoutingManager = {
 	},
 
 	async delegateInquiry(inquiry, agent, custom_values) {
-		console.log("##Telenia_Rocket## delegate Inquiry con custom_values:", custom_values);
+		console.debug("##Telenia_Rocket## delegate Inquiry con custom_values:", custom_values);
 		// return Room Object
 		const { department, rid } = inquiry;
 		if (!agent || (agent.username && !Users.findOneOnlineAgentByUsername(agent.username))) {

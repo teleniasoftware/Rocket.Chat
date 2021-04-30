@@ -3,7 +3,7 @@ import { callbacks } from '../../../callbacks';
 import { LivechatRooms } from '../../../models';
 
 callbacks.add('afterSaveMessage', function(message, room) {
-	console.log("##Telenia_Rocket## afterSaveMessage livechat with message: ", message);
+	console.debug("##Telenia_Rocket## afterSaveMessage livechat with message: ", message);
 	// skips this callback if the message was edited
 	if (!message || message.editedAt) {
 		return message;

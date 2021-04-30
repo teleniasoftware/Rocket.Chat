@@ -19,7 +19,7 @@ class ExternalQueue {
 	}
 
 	getNextAgent(department, custom_values) {
-		console.log("##Telenia_Rocket## External queue with custom_values: ", custom_values);
+		console.debug("##Telenia_Rocket## External queue with custom_values: ", custom_values);
 		for (let i = 0; i < 10; i++) {
 			try {
 				var queryParams = [];

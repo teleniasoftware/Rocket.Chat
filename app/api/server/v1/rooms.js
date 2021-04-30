@@ -250,10 +250,10 @@ API.v1.addRoute('room.hide', {
 		  rid
 		} = this.bodyParams;
 		check(rid, String);
-		console.log("##Telenia_Rocket## room.hide. UserId: ", this.userId);
+		console.debug("##Telenia_Rocket## room.hide. UserId: ", this.userId);
 		const subscription = findSubscriptionByRoomIdAndUserId(rid, this.userId);
 
-		console.log("##Telenia_Rocket## room.hide. Subscription: ", subscription);
+		console.debug("##Telenia_Rocket## room.hide. Subscription: ", subscription);
 
 		if (!subscription.open) {
 		  return API.v1.failure("The room, ".concat(this.bodyParams.name, ", is already hidden"));

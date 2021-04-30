@@ -60,7 +60,7 @@ API.v1.addRoute('subscriptions.read', { authRequired: true }, {
 		check(this.bodyParams, {
 			rid: String,
 		});
-		console.log("##Telenia_Rocket## subscriptions.read");
+		console.debug("##Telenia_Rocket## subscriptions.read");
 		Meteor.runAsUser(this.userId, () =>
 			Meteor.call('readMessages', this.bodyParams.rid),
 		);

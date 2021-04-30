@@ -214,7 +214,7 @@ export const forwardRoomToAgent = async (room, transferData) => {
 };
 
 export const forwardRoomToDepartment = async (room, guest, transferData) => {
-	console.log("##Telenia_Rocket## fowardRoomToDepartment", room, guest, transferData);
+	console.debug("##Telenia_Rocket## fowardRoomToDepartment", room, guest, transferData);
 	if (!room || !room.open) {
 		return false;
 	}

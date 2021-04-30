@@ -5,7 +5,7 @@ import { LivechatVisitors } from '../../models';
 import { normalizeMessageFileUpload } from '../../utils/server/functions/normalizeMessageFileUpload';
 
 callbacks.add('afterSaveMessage', function(message, room) {
-	console.log("##Telenia_Rocket## afterSaveMessage livecaht SMS: ", message);
+	console.debug("##Telenia_Rocket## afterSaveMessage livecaht SMS: ", message);
 	// skips this callback if the message was edited
 	if (message.editedAt) {
 		return message;

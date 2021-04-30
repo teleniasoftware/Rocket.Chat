@@ -11,9 +11,12 @@ Meteor.methods({
 		const userId = Meteor.userId();
 
 		const room = Promise.await(Rooms.findOneById(rid));
+		if(!room){
+			console.debug("##Telenia_Rocket## readMessages(rid) - could not find room with id " + rid);
+		}
 
 		if(room.t !== 'l'){
-			console.log("##Telenia_Rocket## readMessages method");
+			console.debug("##Telenia_Rocket## readMessages method");
 
 			if (!userId) {
 				throw new Meteor.Error('error-invalid-user', 'Invalid user', {
