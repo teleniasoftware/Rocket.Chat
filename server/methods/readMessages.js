@@ -13,6 +13,9 @@ Meteor.methods({
 		const room = Promise.await(Rooms.findOneById(rid));
 		if(!room){
 			console.debug("##Telenia_Rocket## readMessages(rid) - could not find room with id " + rid);
+			throw new Meteor.Error('error-invalid-rid', 'Invalid room', {
+				method: 'readMessages',
+			});
 		}
 
 		if(room.t !== 'l'){
